@@ -1,23 +1,139 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable react/destructuring-assignment */
+import { GetStaticProps } from 'next';
+import Image from 'next/image';
+import ptBR, { format, parseISO } from 'date-fns';
+import styles from './home.module.scss';
+import { api } from '../services/api';
+import convertDurationToTimeString from '../utils/convertDurationToTimeString';
 
-export default function Home(props) {
+type Episode = {
+  id: string;
+  title: string;
+  thumbnail: string;
+  members: string;
+  publishedAt: string;
+  description: string;
+  duration: number;
+  durationAsString: string;
+  url: string;
+};
+
+type HomeProps = {
+  latestEpisodes: Episode[];
+  allEpisodes: Episode[];
+};
+
+export default function Home({ latestEpisodes, allEpisodes }: HomeProps) {
   return (
-    <div>
-      <h1>Index</h1>
-      <p>{JSON.stringify(props.episodes)}</p>
+    <div className={styles.homepage}>
+      <section className={styles.latestEpisodes}>
+        <h2>Últimos episódios</h2>
+        <ul>
+          {latestEpisodes.map(episode => {
+            return (
+              <li key={episode.id}>
+                {/* altura e largura para carregar a imagem. */}
+                <Image
+                  width={192}
+                  height={192}
+                  src={episode.thumbnail}
+                  alt={episode.title}
+                />
+                <div className={styles.episodesDetails}>
+                  <a href="blank">{episode.title}</a>
+                  <p>{episode.members}</p>
+                  <span>{episode.publishedAt}</span>
+                  <span>{episode.durationAsString}</span>
+                </div>
+                <button type="button">
+                  <img src="/play-green.svg" alt="Tocar episódio" />
+                </button>
+              </li>
+            );
+          })}
+        </ul>
+      </section>
+      <section className={styles.allEpisodes}>
+        <h2>Todos os episódios</h2>
+        <table cellSpacing={0}>
+          <thead>
+            <th> </th>
+            <th>Podcast</th>
+            <th>Integrantes</th>
+            <th>Data</th>
+            <th>Duração</th>
+            <th> </th>
+          </thead>
+          <tbody>
+            {allEpisodes.map(episode => {
+              return (
+                <tr key={episode.id}>
+                  <td style={{ width: 72 }}>
+                    <Image
+                      width={120}
+                      height={120}
+                      src={episode.thumbnail}
+                      alt={episode.title}
+                      objectFit="cover"
+                    />
+                  </td>
+                  <td>
+                    <a href="blank">{episode.title}</a>
+                  </td>
+                  <td>{episode.members}</td>
+                  <td style={{ width: 100 }}>{episode.publishedAt}</td>
+                  <td>{episode.durationAsString}</td>
+                  <td>
+                    <button type="button">
+                      <img src="/play-green.svg" alt="Tocar episódio" />
+                    </button>
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </section>
     </div>
   );
 }
 
-export async function getStaticProps() {
-  const response = await fetch('http://localhost:3333/episodes');
-  const data = await response.json();
+export const getStaticProps: GetStaticProps = async () => {
+  const { data } = await api.get('episodes', {
+    params: {
+      _limit: 12,
+      _sort: 'publish_at',
+      _order: 'desc',
+    },
+  });
+
+  const episodes = data.map(episode => {
+    return {
+      id: episode.id,
+      title: episode.title,
+      thumbnail: episode.thumbnail,
+      members: episode.members,
+      publishedAt: format(parseISO(episode.published_at), 'd MMM yy', {
+        locale: ptBR,
+      }),
+      durationAsString: convertDurationToTimeString(
+        Number(episode.file.duration),
+      ),
+      duration: Number(episode.file.duration),
+      description: episode.description,
+      url: episode.file.url,
+    };
+  });
+
+  const latestEpisodes = episodes.slice(0, 2);
+  const allEpisodes = episodes.slice(2, episodes.length);
 
   return {
     props: {
-      episodes: data,
+      latestEpisodes,
+      allEpisodes,
     },
     revalidate: 60 * 60 * 8, // tempo em segundos para gerar nova página
   };
-}
+};

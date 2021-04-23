@@ -1,3 +1,15 @@
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+
+body{
+  background: var(--gray-50);
+}
+
 :root {
   --white: #FFF;
 
@@ -15,15 +27,6 @@
   --purple-800: #6F48C9;
 }
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-body{
-  background: var(--gray-50);
-}
 
 @media (max-width: 1080px){
   html{
