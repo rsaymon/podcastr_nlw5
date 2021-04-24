@@ -1,10 +1,12 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable react/prop-types */
 /* eslint-disable react/destructuring-assignment */
 import { GetStaticProps } from 'next';
 import Image from 'next/image';
+import Link from 'next/link';
 import ptBR, { format, parseISO } from 'date-fns';
 import styles from './home.module.scss';
-import { api } from '../services/api';
+import api from '../services/api';
 import convertDurationToTimeString from '../utils/convertDurationToTimeString';
 
 type Episode = {
@@ -13,7 +15,6 @@ type Episode = {
   thumbnail: string;
   members: string;
   publishedAt: string;
-  description: string;
   duration: number;
   durationAsString: string;
   url: string;
@@ -41,7 +42,9 @@ export default function Home({ latestEpisodes, allEpisodes }: HomeProps) {
                   alt={episode.title}
                 />
                 <div className={styles.episodesDetails}>
-                  <a href="blank">{episode.title}</a>
+                  <Link href={`/episodes/${episode.id}`}>
+                    <a>{episode.title}</a>
+                  </Link>
                   <p>{episode.members}</p>
                   <span>{episode.publishedAt}</span>
                   <span>{episode.durationAsString}</span>
@@ -79,7 +82,9 @@ export default function Home({ latestEpisodes, allEpisodes }: HomeProps) {
                     />
                   </td>
                   <td>
-                    <a href="blank">{episode.title}</a>
+                    <Link href={`/episodes/${episode.id}`}>
+                      <a>{episode.title}</a>
+                    </Link>
                   </td>
                   <td>{episode.members}</td>
                   <td style={{ width: 100 }}>{episode.publishedAt}</td>
@@ -121,7 +126,6 @@ export const getStaticProps: GetStaticProps = async () => {
         Number(episode.file.duration),
       ),
       duration: Number(episode.file.duration),
-      description: episode.description,
       url: episode.file.url,
     };
   });
