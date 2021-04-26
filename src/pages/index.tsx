@@ -2,12 +2,14 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable react/destructuring-assignment */
 import { GetStaticProps } from 'next';
+import { useContext } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import ptBR, { format, parseISO } from 'date-fns';
 import styles from './home.module.scss';
 import api from '../services/api';
 import convertDurationToTimeString from '../utils/convertDurationToTimeString';
+import PlayerContext from '../contexts/PlayerContext';
 
 type Episode = {
   id: string;
@@ -26,6 +28,8 @@ type HomeProps = {
 };
 
 export default function Home({ latestEpisodes, allEpisodes }: HomeProps) {
+  const { play } = useContext(PlayerContext);
+
   return (
     <div className={styles.homepage}>
       <section className={styles.latestEpisodes}>
@@ -49,7 +53,7 @@ export default function Home({ latestEpisodes, allEpisodes }: HomeProps) {
                   <span>{episode.publishedAt}</span>
                   <span>{episode.durationAsString}</span>
                 </div>
-                <button type="button">
+                <button type="button" onClick={() => play(episode)}>
                   <img src="/play-green.svg" alt="Tocar episódio" />
                 </button>
               </li>
@@ -61,12 +65,14 @@ export default function Home({ latestEpisodes, allEpisodes }: HomeProps) {
         <h2>Todos os episódios</h2>
         <table cellSpacing={0}>
           <thead>
-            <th> </th>
-            <th>Podcast</th>
-            <th>Integrantes</th>
-            <th>Data</th>
-            <th>Duração</th>
-            <th> </th>
+            <tr>
+              <th> </th>
+              <th>Podcast</th>
+              <th>Integrantes</th>
+              <th>Data</th>
+              <th>Duração</th>
+              <th> </th>
+            </tr>
           </thead>
           <tbody>
             {allEpisodes.map(episode => {

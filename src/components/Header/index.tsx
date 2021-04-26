@@ -11,9 +11,9 @@ export default function Header() {
   return (
     <header className={styles.headerContainer}>
       <Link href="/">
-        <a>
+        <>
           <img src="/logo.svg" alt="Logo" />
-        </a>
+        </>
       </Link>
       <p>O melhor para você ouvir, sempre!</p>
 
