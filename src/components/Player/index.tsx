@@ -13,13 +13,8 @@ export default function Player() {
   const {
     episodeList,
     currentEpisodeIndex,
-<<<<<<< HEAD
     isPlaying,
     togglePlay,
-=======
-    togglePlay,
-    isPlaying,
->>>>>>> bc3342ad5f0fb572b5fc3cf1ddf00f646bd33c4b
     setPlayingState,
   } = useContext(PlayerContext);
 
@@ -96,18 +91,11 @@ export default function Player() {
           <button type="button" disabled={!episode}>
             <img src="/play-previous.svg" alt="Anterior" />
           </button>
-          <button
-            type="button"
-            className={styles.playButton}
-            disabled={!episode}
-            onClick={() => {
-              togglePlay;
-            }}
-          >
+          <button type="button" disabled={!episode} onClick={togglePlay}>
             {isPlaying ? (
-              <img src="pause.svg" alt="Tocar" />
+              <img src="pause.svg" alt="Pause" className={styles.playButton} />
             ) : (
-              <img src="play.svg" alt="Pausar" />
+              <img src="play.svg" alt="Tocar" className={styles.playButton} />
             )}
           </button>
           <button type="button" disabled={!episode}>
