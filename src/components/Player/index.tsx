@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/media-has-caption */
 import { useContext, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import Slider from 'rc-slider';
@@ -85,8 +86,6 @@ export default function Player() {
           />
         )}
 
-        {/* parei em 0:57:15 */}
-
         <div className={styles.buttons}>
           <button type="button" disabled={!episode}>
             <img src="/shuffle.svg" alt="Aleatório" />
@@ -98,7 +97,9 @@ export default function Player() {
             type="button"
             className={styles.playButton}
             disabled={!episode}
-            onClick={()=>{togglePlay}}
+            onClick={() => {
+              togglePlay;
+            }}
           >
             {isPlaying ? (
               <img src="pause.svg" alt="Tocar" />
