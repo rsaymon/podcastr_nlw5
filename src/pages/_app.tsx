@@ -12,15 +12,34 @@ import PlayerContext from '../contexts/PlayerContext';
 
 function MyApp({ Component, pageProps }) {
   const [episodeList, setEpisodeList] = useState([]);
+  const [isPlaying, setIsPlaying] = useState(true);
   const [currentEpisodeIndex, setCurrentEpisodeIndex] = useState(0);
 
   function play(episode) {
     setEpisodeList([episode]);
     setCurrentEpisodeIndex(0);
+    setIsPlaying(true);
+  }
+
+  function togglePlay() {
+    setIsPlaying(!isPlaying);
+  }
+
+  function setPlayingState(state: boolean) {
+    setIsPlaying(state);
   }
 
   return (
-    <PlayerContext.Provider value={{ episodeList, currentEpisodeIndex, play }}>
+    <PlayerContext.Provider
+      value={{
+        episodeList,
+        currentEpisodeIndex,
+        play,
+        isPlaying,
+        togglePlay,
+        setPlayingState,
+      }}
+    >
       <div className={styles.wrapper}>
         <main>
           <Header />
