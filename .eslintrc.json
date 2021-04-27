@@ -24,6 +24,10 @@
       "prettier"
   ],
   "rules": {
+    "eslint-disable jsx-a11y/media-has-caption": "off",
+    "eslint-disable @typescript-eslint/explicit-module-boundary-types": "off",
+    "eslint-disable react/jsx-props-no-spreading": "off",
+    //regras desativadas acima
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn",
     "react/jsx-filename-extension": [
