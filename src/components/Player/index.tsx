@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable jsx-a11y/media-has-caption */
 import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
