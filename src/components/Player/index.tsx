@@ -143,9 +143,9 @@ export default function Player() {
             onClick={togglePlay}
           >
             {isPlaying ? (
-              <img src="pause.svg" alt="Pause" />
+              <img src="/pause.svg" alt="Pause" />
             ) : (
-              <img src="play.svg" alt="Tocar" />
+              <img src="/play.svg" alt="Tocar" />
             )}
           </button>
           <button
